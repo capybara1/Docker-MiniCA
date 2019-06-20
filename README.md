@@ -12,6 +12,12 @@ A docker image that provides [MiniCA](https://github.com/jsha/minica)
 
 ### Command Line
 
-```bash
-docker run -v "$PWD:/output" capybara1/minica
+Create executable file `/usr/local/bin/minca`
+
+```sh
+#!/bin/sh
+
+set -eu
+
+docker run -it -v "$PWD:/output" capybara1/minica "$@"
 ```

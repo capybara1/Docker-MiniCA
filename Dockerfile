@@ -19,4 +19,6 @@ LABEL org.label-schema.schema-version="1.0" \
 RUN apk --no-cache add iptables
 COPY --from=build /go/bin/minica /usr/local/bin/minica
 WORKDIR /output
-ENTRYPOINT ["minica"]
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["/usr/local/bin/minica"]

@@ -1,8 +1,8 @@
-FROM golang:1.12.6-alpine3.9 AS build
+FROM golang:1.14-alpine3.11 AS build
 RUN apk --no-cache add git
 RUN go get github.com/jsha/minica
 
-FROM alpine:3.9
+FROM alpine:3.11
 ARG VERSION
 ARG VCS_REF
 ARG BUILD_DATE
@@ -18,7 +18,6 @@ LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.dockerfile="/Dockerfile"
 RUN apk --no-cache add iptables
 COPY --from=build /go/bin/minica /usr/local/bin/minica
-WORKDIR /output
+WORKDIR /work
 COPY docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["/usr/local/bin/minica"]

@@ -27,7 +27,7 @@ for arg do
 	set -- "$@" "$arg"
 done
 
-if ! eval $force && [ -f "$out_dir/cert.pem" -o -f "$out_dir/key.pem" ]; then
+if ! eval $force && [ -f "$out_dir/cert.pem" -o -f "$out_dir/key.pem" -o "$out_dir/combined.pem" ]; then
 	>&2 echo "Cannot overwrite existing files. Consider using -force."
 	exit 1
 fi
@@ -36,6 +36,9 @@ fi
 [ -f "/output/$key_name" ] && ln -s "/output/$key_name" "$key_name"
 
 /usr/local/bin/minica "$@" || eval "echo -e '  -force\n        Force overwrite'; exit $?"
+
+cat "$result_dir/cert.pem" "$result_dir/key.pem" > "$result_dir/combined.pem"
+chmod go-rwx "$result_dir/combined.pem"
 
 [ ! -f "/output/$cert_name" ] && cp "$cert_name" "/output/$cert_name"
 [ ! -f "/output/$key_name" ] && cp "$key_name" "/output/$key_name"
